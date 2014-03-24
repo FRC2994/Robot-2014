@@ -361,6 +361,15 @@ public:
 			// Shift into low gear.
 			shifters.Set(DoubleSolenoid::kReverse);
 		}
+		
+		if(kEventOpened == leftStick.GetEvent(BUTTON_TURBO))
+		{
+			robotDrive.SetTurbo(true);
+		}
+		else if(kEventClosed == leftStick.GetEvent(BUTTON_TURBO))
+		{
+			robotDrive.SetTurbo(false);
+		}
 
 		robotDrive.ArcadeDrive(rightStick.GetY(), -rightStick.GetX());
 	}
