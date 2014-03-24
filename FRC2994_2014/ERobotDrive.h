@@ -60,6 +60,9 @@ public:
 	bool IsSafetyEnabled();
 	void SetSafetyEnabled(bool enabled);
 	void GetDescription(char *desc);
+	
+	void SetTurbo(bool turbo);
+	bool GetTurbo();
 
 protected:
 	void InitRobotDrive();
@@ -80,6 +83,8 @@ protected:
 	SpeedController *m_centerRightMotor;
 	SpeedController *m_rearRightMotor;
 	MotorSafetyHelper *m_safetyHelper;
+	
+	bool m_turbo;
 	
 private:
 	int32_t GetNumMotors()

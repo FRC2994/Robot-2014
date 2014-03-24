@@ -42,6 +42,7 @@ void ERobotDrive::InitRobotDrive() {
 	m_maxOutput = 1.0;
 	m_safetyHelper = new MotorSafetyHelper(this);
 	m_safetyHelper->SetSafetyEnabled(true);
+	m_turbo = false;
 }
 
 ERobotDrive::ERobotDrive(SpeedController &frontLeftMotor, SpeedController &rearLeftMotor, SpeedController &centerLeftMotor,
@@ -284,14 +285,18 @@ void ERobotDrive::SetLeftRightMotorOutputs(float leftOutput, float rightOutput)
 
 	if (m_frontLeftMotor != NULL)
 		m_frontLeftMotor->Set(Limit(leftOutput) * m_invertedMotors[kFrontLeftMotor] * m_maxOutput, syncGroup);
-	if (m_centerLeftMotor != NULL)
+	if (m_centerLeftMotor != NULL && m_turbo)
 		m_centerLeftMotor->Set(Limit(leftOutput) * m_invertedMotors[kCenterLeftMotor] * m_maxOutput, syncGroup);
+	else
+		m_centerLeftMotor->Set(0.0);
 	m_rearLeftMotor->Set(Limit(leftOutput) * m_invertedMotors[kRearLeftMotor] * m_maxOutput, syncGroup);
 	
 	if (m_frontRightMotor != NULL)
 		m_frontRightMotor->Set(-Limit(rightOutput) * m_invertedMotors[kFrontRightMotor] * m_maxOutput, syncGroup);
-	if (m_centerRightMotor != NULL)
+	if (m_centerRightMotor != NULL && m_turbo)
 		m_centerRightMotor->Set(-Limit(rightOutput) * m_invertedMotors[kCenterLeftMotor] * m_maxOutput, syncGroup);
+	else
+		m_centerRightMotor->Set(0.0);
 	m_rearRightMotor->Set(-Limit(rightOutput) * m_invertedMotors[kRearRightMotor] * m_maxOutput, syncGroup);
 
 	CANJaguar::UpdateSyncGroup(syncGroup);
@@ -417,6 +422,16 @@ void ERobotDrive::SetSafetyEnabled(bool enabled)
 void ERobotDrive::GetDescription(char *desc)
 {
 	sprintf(desc, "RobotDrive");
+}
+
+void ERobotDrive::SetTurbo(bool turbo)
+{
+	m_turbo = turbo;
+}
+
+bool ERobotDrive::GetTurbo()
+{
+	return m_turbo;
 }
 
 void ERobotDrive::StopMotor()

@@ -61,6 +61,7 @@
 #define BUTTON_LOAD 4
 #define BUTTON_ARM 5
 #define BUTTON_PASS 7
+#define BUTTON_TURBO 6
 
 // Motor speeds
 #define WINCH_FWD 1.0
